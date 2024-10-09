@@ -81,8 +81,14 @@ public class UserRepositoryTests {
 	}
 	
 	@Test
-	public void testUDeleteUser() {
+	public void testDeleteUser() {
 		Integer userId = 2;
 		repo.deleteById(userId);
+	}
+	
+	@Test void testGetUserByEmail() {
+		String email = "ravi@gmail.com";
+		User user = repo.getUserByEmail(email);
+		assertThat(user).isNotNull();
 	}
 }
