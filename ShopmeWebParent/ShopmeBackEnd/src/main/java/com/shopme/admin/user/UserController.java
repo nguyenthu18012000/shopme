@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,11 +38,33 @@ public class UserController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/users/new")
 	public String newUser(@RequestBody User user) {
-		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail());
+		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail(), null);
 		if (!isEmailUnique) {
 			return "email is existed";
 		}
 		this.service.save(user);
 		return "create user successfully";
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping("/users/{id}")
+	public User getUserById(@PathVariable(name = "id") Integer id) throws UserNotFoundException {
+		try {
+			User user = this.service.get(id);
+			return user;
+		} catch (Exception e) {
+			throw new UserNotFoundException("Could not found any user with ID " + id);
+		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PutMapping("/users/edit")
+	public String editUser(@RequestBody User user) {
+		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail(), user.getId());
+		if (!isEmailUnique) {
+			return "email is existed";
+		}
+		this.service.save(user);
+		return "update user successfully";
 	}
 }

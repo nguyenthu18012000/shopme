@@ -1,6 +1,7 @@
 package com.shopme.admin.user;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +31,17 @@ public class UserService {
 	}
 	
 	public void save(User user) {
-		this.encodePassword(user);
+		boolean isUpdatingUser = (user.getId() != null);
+		if (isUpdatingUser) {
+			User existedUser = this.userRepo.findById(user.getId()).get();
+			if (user.getPassword().isEmpty()) {
+				user.setPassword(existedUser.getPassword());
+			} else {
+				this.encodePassword(user);
+			}
+		} else {
+			this.encodePassword(user);
+		}
 		this.userRepo.save(user);
 	}
 	
@@ -39,8 +50,19 @@ public class UserService {
 		user.setPassword(encodedPassword);
 	}
 	
-	public boolean isEmailUnique(String email) {
+	public boolean isEmailUnique(String email, Integer userId) {
 		User userByEmail = userRepo.getUserByEmail(email);
-		return userByEmail == null;
+		if (userId == null) {			
+			return userByEmail == null;
+		}
+		return userId == userByEmail.getId();
+	}
+
+	public User get(Integer id) throws UserNotFoundException {
+		try {			
+			return this.userRepo.findById(id).get();
+		} catch (NoSuchElementException ex) {
+			throw new UserNotFoundException("Could not found any user with ID " + id);
+		}
 	}
 }
