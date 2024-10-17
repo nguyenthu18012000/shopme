@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,7 +51,7 @@ public class UserController {
 	@GetMapping("/users/{id}")
 	public User getUserById(@PathVariable(name = "id") Integer id) throws UserNotFoundException {
 		try {
-			User user = this.service.get(id);
+			User user = this.service.getUserById(id);
 			return user;
 		} catch (Exception e) {
 			throw new UserNotFoundException("Could not found any user with ID " + id);
@@ -66,5 +67,16 @@ public class UserController {
 		}
 		this.service.save(user);
 		return "update user successfully";
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@DeleteMapping("/users/delete/{id}")
+	public String deleteUser(@PathVariable(name = "id") Integer id) {
+		try {
+			this.service.deleteUserById(id);
+			return "update user successfully";
+		} catch (Exception e) {
+			return "something wrong";
+		}
 	}
 }

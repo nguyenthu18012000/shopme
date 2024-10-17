@@ -58,11 +58,19 @@ public class UserService {
 		return userId == userByEmail.getId();
 	}
 
-	public User get(Integer id) throws UserNotFoundException {
+	public User getUserById(Integer id) throws UserNotFoundException {
 		try {			
 			return this.userRepo.findById(id).get();
 		} catch (NoSuchElementException ex) {
 			throw new UserNotFoundException("Could not found any user with ID " + id);
 		}
+	}
+	
+	public void deleteUserById(Integer id) throws UserNotFoundException {
+		Long countById = this.userRepo.countById(id);
+		if (countById == null || countById == 0) {
+			throw new UserNotFoundException("Could not found any user with ID " + id);
+		}
+		this.userRepo.deleteById(id);
 	}
 }
