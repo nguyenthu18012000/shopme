@@ -4,17 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class UserController {
@@ -38,12 +32,13 @@ public class UserController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/users/new")
-	public String newUser(@RequestBody User user) {
+	public String newUser(@RequestBody User user, @RequestParam("image") MultipartFile multipartFile) {
+		System.out.println("getOriginalFilename" + multipartFile.getOriginalFilename());
 		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail(), null);
 		if (!isEmailUnique) {
 			return "email is existed";
 		}
-		this.service.save(user);
+//		this.service.save(user);
 		return "create user successfully";
 	}
 	
