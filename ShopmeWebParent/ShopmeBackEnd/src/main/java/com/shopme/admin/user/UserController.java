@@ -1,20 +1,17 @@
 package com.shopme.admin.user;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.shopme.admin.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class UserController {
@@ -38,12 +35,21 @@ public class UserController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/users/new")
-	public String newUser(@RequestBody User user) {
+	public String newUser(@ModelAttribute User user, @RequestPart("image") MultipartFile multipartFile) throws IOException {
 		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail(), null);
 		if (!isEmailUnique) {
 			return "email is existed";
 		}
-		this.service.save(user);
+		User savedUser = this.service.save(user);
+
+		if (!multipartFile.isEmpty()) {
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			System.out.println(fileName);
+			savedUser.setPhotos(fileName);
+			this.service.save(savedUser);
+			String uploadDir = "user-photo/" + savedUser.getId();
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		}
 		return "create user successfully";
 	}
 	
@@ -60,10 +66,20 @@ public class UserController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/users/edit")
-	public String editUser(@RequestBody User user) {
+	public String editUser(@ModelAttribute User user, @RequestPart(name = "image", required = false) MultipartFile multipartFile) throws IOException {
 		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail(), user.getId());
 		if (!isEmailUnique) {
 			return "email is existed";
+		}
+		if (multipartFile != null) {
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			user.setPhotos(fileName);
+			this.service.save(user);
+			String uploadDir = "user-photo/" + user.getId();
+			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		} else {
+			
 		}
 		this.service.save(user);
 		return "update user successfully";

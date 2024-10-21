@@ -30,7 +30,7 @@ public class UserService {
 		return (List<Role>) this.roleRepo.findAll();
 	}
 	
-	public void save(User user) {
+	public User save(User user) {
 		boolean isUpdatingUser = (user.getId() != null);
 		if (isUpdatingUser) {
 			User existedUser = this.userRepo.findById(user.getId()).get();
@@ -42,7 +42,7 @@ public class UserService {
 		} else {
 			this.encodePassword(user);
 		}
-		this.userRepo.save(user);
+		return this.userRepo.save(user);
 	}
 	
 	private void encodePassword(User user) {
