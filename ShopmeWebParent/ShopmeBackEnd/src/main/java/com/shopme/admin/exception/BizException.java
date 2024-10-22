@@ -1,4 +1,4 @@
-package com.shopme.admin.exceptions;
+package com.shopme.admin.exception;
 
 import com.shopme.admin.pojo.response.BaseResponseEnumInterface;
 

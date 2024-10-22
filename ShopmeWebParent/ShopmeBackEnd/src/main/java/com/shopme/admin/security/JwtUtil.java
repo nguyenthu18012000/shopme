@@ -1,8 +1,8 @@
 package com.shopme.admin.security;
 
-import com.shopme.admin.exceptions.BizException;
+import com.shopme.admin.exception.BizException;
 import com.shopme.admin.pojo.response.BaseResponseEnum;
-import com.shopme.admin.user.UserRepository;
+import com.shopme.admin.repository.UserRepository;
 import com.shopme.common.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -40,7 +40,6 @@ public class JwtUtil {
                     .compact();
 
         } catch (Exception ex) {
-//            log.error("generateLoginJwtToken: {}", ex.getMessage());
             throw new BizException(BaseResponseEnum.SERVER_ERROR, "Can't generate token");
         }
     }
@@ -60,7 +59,6 @@ public class JwtUtil {
             userLogin.setEmail(email);
             return userLogin;
         } catch (Exception ex) {
-//            log.error("validateToken: error - {}", ex.getMessage());
             return null;
         }
     }

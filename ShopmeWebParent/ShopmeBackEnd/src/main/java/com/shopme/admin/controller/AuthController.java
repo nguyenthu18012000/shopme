@@ -1,5 +1,6 @@
-package com.shopme.admin.auth;
+package com.shopme.admin.controller;
 
+import com.shopme.admin.service.AuthService;
 import com.shopme.admin.pojo.request.UserLoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

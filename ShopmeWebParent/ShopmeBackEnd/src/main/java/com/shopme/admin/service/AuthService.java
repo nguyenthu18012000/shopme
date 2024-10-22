@@ -1,4 +1,4 @@
-package com.shopme.admin.auth;
+package com.shopme.admin.service;
 
 import com.shopme.admin.pojo.request.UserLoginRequest;
 import org.springframework.http.ResponseEntity;

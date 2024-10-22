@@ -1,7 +1,7 @@
-package com.shopme.admin.auth;
+package com.shopme.admin.service.impl;
 
 import com.shopme.admin.pojo.request.UserLoginRequest;
-import com.shopme.admin.user.UserService;
+import com.shopme.admin.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Override
     public ResponseEntity<Object> login(UserLoginRequest request) {

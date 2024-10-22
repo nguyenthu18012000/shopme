@@ -1,4 +1,4 @@
-package com.shopme.admin.user;
+package com.shopme.admin.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
