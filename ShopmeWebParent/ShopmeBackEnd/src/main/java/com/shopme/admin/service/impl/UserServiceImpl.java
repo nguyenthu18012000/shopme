@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.shopme.admin.constants.CommonConstant;
+import com.shopme.admin.pojo.response.ListUserResponse;
 import com.shopme.admin.util.FileUploadUtil;
 import com.shopme.admin.exception.BizException;
 import com.shopme.admin.exception.UserNotFoundException;
@@ -15,6 +17,9 @@ import com.shopme.admin.repository.UserRepository;
 import com.shopme.admin.security.JwtUtil;
 import com.shopme.admin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,11 +47,26 @@ public class UserServiceImpl implements UserService {
 	public List<User> getListUser() {
 		return (List<User>) this.userRepo.findAll();
 	}
-	
+
+	@Override
+	public ListUserResponse getListUserByPage(Integer pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber - 1, CommonConstant.USER_PER_PAGE);
+		Page<User> page = this.userRepo.findAll(pageable);
+		ListUserResponse listUserResponse = new ListUserResponse();
+		listUserResponse.setItems(page.getContent());
+		listUserResponse.setPage(pageNumber);
+		listUserResponse.setTotalPage(page.getTotalPages());
+		listUserResponse.setPageSize(page.getSize());
+		listUserResponse.setTotalItems(page.getTotalElements());
+		return listUserResponse;
+	}
+
+	@Override
 	public List<Role> getListRole() {
 		return (List<Role>) this.roleRepo.findAll();
 	}
 
+	@Override
 	public User getUserById(Integer id) throws UserNotFoundException {
 		try {
 			return this.userRepo.findById(id).get();
@@ -55,6 +75,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
 	public User createUser(User user, MultipartFile multipartFile) throws IOException {
 		this.encodePassword(user);
 		User savedUser = this.userRepo.save(user);
@@ -68,6 +89,7 @@ public class UserServiceImpl implements UserService {
 		return this.userRepo.save(user);
 	}
 
+	@Override
 	public User updateUser(User user, MultipartFile multipartFile) throws IOException {
 		User existedUser = this.userRepo.findById(user.getId()).get();
 		if (user.getPassword().isEmpty()) {
@@ -89,7 +111,8 @@ public class UserServiceImpl implements UserService {
 		String encodedPassword = this.passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
 	}
-	
+
+	@Override
 	public boolean isEmailUnique(String email, Integer userId) {
 		User userByEmail = userRepo.getUserByEmail(email);
 		if (userId == null) {			
@@ -98,6 +121,7 @@ public class UserServiceImpl implements UserService {
 		return userId == userByEmail.getId();
 	}
 
+	@Override
 	public void deleteUserById(Integer id) throws UserNotFoundException {
 		Long countById = this.userRepo.countById(id);
 		if (countById == null || countById == 0) {
@@ -106,6 +130,7 @@ public class UserServiceImpl implements UserService {
 		this.userRepo.deleteById(id);
 	}
 
+	@Override
 	public ResponseEntity<Object> login(UserLoginRequest request) {
 		User userEntity = this.userRepo.getUserByEmail(request.getEmail());
 //				.orElseThrow(() -> new BizException(BaseResponseEnum.BAD_REQUEST, "Invalid credentials"));

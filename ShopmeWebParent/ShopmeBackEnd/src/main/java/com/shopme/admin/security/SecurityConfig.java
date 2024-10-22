@@ -17,7 +17,7 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-    private static final List<String> PATHS_NO_AUTH = List.of("/*/login", "/users/**");
+    private static final List<String> PATHS_NO_AUTH = List.of("/*/login", "/users/**", "/user/**");
 
     @Bean
     public UserDetailsService UserDetailsService() {
@@ -35,8 +35,6 @@ public class SecurityConfig {
 
         String[] pathsNoAuth = new String[PATHS_NO_AUTH.size()];
         PATHS_NO_AUTH.toArray(pathsNoAuth);
-
-        System.out.println("pathsNoAuth" + Arrays.toString(pathsNoAuth));
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 

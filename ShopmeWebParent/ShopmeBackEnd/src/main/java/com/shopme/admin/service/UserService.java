@@ -2,6 +2,7 @@ package com.shopme.admin.service;
 
 import com.shopme.admin.exception.UserNotFoundException;
 import com.shopme.admin.pojo.request.UserLoginRequest;
+import com.shopme.admin.pojo.response.ListUserResponse;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import java.util.List;
 public interface UserService {
 
     public List<User> getListUser();
+
+    public ListUserResponse getListUserByPage(Integer pageNumber);
 
     public List<Role> getListRole();
 

@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import com.shopme.admin.exception.UserNotFoundException;
+import com.shopme.admin.pojo.response.ListUserResponse;
 import com.shopme.admin.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +22,22 @@ public class UserController {
 	private UserServiceImpl service;
 	
 	@CrossOrigin(origins = "http://localhost:4200")
-	@GetMapping("/users")
-	public ResponseEntity<Object> listAll() {
+	@GetMapping("/users/all")
+	public ResponseEntity<Object> getListUser() {
 		List<User> listUsers = service.getListUser();
+		return ResponseEntity.ok(listUsers);
+	}
+
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping("/user")
+	public ResponseEntity<Object> listAll(@RequestParam(value = "page", defaultValue = "1") Integer page) {
+		ListUserResponse listUsers = service.getListUserByPage(page);
 		return ResponseEntity.ok(listUsers);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/users/roles")
-	public ResponseEntity<Object> listRoles() {
+	public ResponseEntity<Object> getListRole() {
 		List<Role> listRoles = service.getListRole();
 		return ResponseEntity.ok(listRoles);
 	}
