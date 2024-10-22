@@ -3,7 +3,13 @@ package com.shopme.admin.user;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.shopme.admin.exceptions.BizException;
+import com.shopme.admin.pojo.request.UserLoginRequest;
+import com.shopme.admin.pojo.response.BaseResponseEnum;
+import com.shopme.admin.pojo.response.UserLoginResponse;
+import com.shopme.admin.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +27,9 @@ public class UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private JwtUtil jwtUtil;
 	
 	public List<User> listAll() {
 		return (List<User>) this.userRepo.findAll();
@@ -72,5 +81,22 @@ public class UserService {
 			throw new UserNotFoundException("Could not found any user with ID " + id);
 		}
 		this.userRepo.deleteById(id);
+	}
+
+	public ResponseEntity<Object> login(UserLoginRequest request) {
+		User userEntity = this.userRepo.getUserByEmail(request.getEmail());
+//				.orElseThrow(() -> new BizException(BaseResponseEnum.BAD_REQUEST, "Invalid credentials"));
+		if (userEntity == null) {
+			throw new BizException(BaseResponseEnum.BAD_REQUEST, "Invalid credentials");
+		}
+
+		if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
+			throw new BizException(BaseResponseEnum.UN_AUTHORIZE, "Invalid credentials");
+		}
+
+		UserLoginResponse response = new UserLoginResponse();
+		response.setAccessToken(jwtUtil.generateLoginJwtToken(userEntity));
+		response.setUserId(userEntity.getId());
+		return ResponseEntity.ok(response);
 	}
 }
