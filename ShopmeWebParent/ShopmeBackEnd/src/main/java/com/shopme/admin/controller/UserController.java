@@ -30,8 +30,12 @@ public class UserController {
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/user")
-	public ResponseEntity<Object> listAll(@RequestParam(value = "page", defaultValue = "1") Integer page) {
-		ListUserResponse listUsers = service.getListUserByPage(page);
+	public ResponseEntity<Object> getListUserByPage(
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "sortField", required = false, defaultValue = "") String sortField,
+			@RequestParam(value = "sortDir", required = false, defaultValue = "") String sortDir
+	) {
+		ListUserResponse listUsers = service.getListUserByPage(page, sortField, sortDir);
 		return ResponseEntity.ok(listUsers);
 	}
 	
