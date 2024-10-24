@@ -15,7 +15,7 @@ public interface UserService {
 
     public List<User> getListUser();
 
-    public ListUserResponse getListUserByPage(Integer pageNumber, String sortField, String sortDir);
+    public ListUserResponse getListUserByPage(Integer pageNumber, String sortField, String sortDir, String keyword);
 
     public List<Role> getListRole();
 

@@ -50,13 +50,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ListUserResponse getListUserByPage(Integer pageNumber,  String sortField, String sortDir) {
+	public ListUserResponse getListUserByPage(Integer pageNumber,  String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 
 		Pageable pageable = PageRequest.of(pageNumber - 1, CommonConstant.USER_PER_PAGE, sort);
 
-		Page<User> page = this.userRepo.findAll(pageable);
+		Page<User> page;
+		if (keyword != "") {
+			page = this.userRepo.findAll(keyword, pageable);
+		} else {
+			page = this.userRepo.findAll(pageable);
+		}
+
 
 		ListUserResponse listUserResponse = new ListUserResponse();
 		listUserResponse.setItems(page.getContent());

@@ -33,9 +33,10 @@ public class UserController {
 	public ResponseEntity<Object> getListUserByPage(
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "sortField", required = false, defaultValue = "") String sortField,
-			@RequestParam(value = "sortDir", required = false, defaultValue = "") String sortDir
+			@RequestParam(value = "sortDir", required = false, defaultValue = "") String sortDir,
+			@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword
 	) {
-		ListUserResponse listUsers = service.getListUserByPage(page, sortField, sortDir);
+		ListUserResponse listUsers = service.getListUserByPage(page, sortField, sortDir, keyword);
 		return ResponseEntity.ok(listUsers);
 	}
 	
