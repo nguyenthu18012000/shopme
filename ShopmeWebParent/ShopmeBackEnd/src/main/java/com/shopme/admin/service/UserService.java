@@ -5,6 +5,7 @@ import com.shopme.admin.pojo.request.UserLoginRequest;
 import com.shopme.admin.pojo.response.ListUserResponse;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,4 +31,6 @@ public interface UserService {
     public void deleteUserById(Integer id) throws UserNotFoundException;
 
     public ResponseEntity<Object> login(UserLoginRequest request);
+
+    public void exportUserCSV(HttpServletResponse response);
 }

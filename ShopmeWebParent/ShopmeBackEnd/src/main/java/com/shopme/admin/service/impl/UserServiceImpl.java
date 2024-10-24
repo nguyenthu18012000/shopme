@@ -16,6 +16,8 @@ import com.shopme.admin.repository.RoleRepository;
 import com.shopme.admin.repository.UserRepository;
 import com.shopme.admin.security.JwtUtil;
 import com.shopme.admin.service.UserService;
+import com.shopme.admin.util.UserCsvExporter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -159,4 +161,15 @@ public class UserServiceImpl implements UserService {
 		response.setUserId(userEntity.getId());
 		return ResponseEntity.ok(response);
 	}
+
+	@Override
+	public void exportUserCSV(HttpServletResponse response) {
+		List<User> listUsers = this.getListUser();
+		UserCsvExporter exporter = new UserCsvExporter();
+        try {
+            exporter.export(listUsers, response);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

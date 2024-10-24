@@ -6,8 +6,8 @@ import java.util.List;
 import com.shopme.admin.exception.UserNotFoundException;
 import com.shopme.admin.pojo.response.ListUserResponse;
 import com.shopme.admin.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,5 +89,11 @@ public class UserController {
 		} catch (Exception e) {
 			return "something wrong";
 		}
+	}
+
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping("user/export/csv")
+	public void exportToCSV(HttpServletResponse response) throws IOException {
+		this.service.exportUserCSV(response);
 	}
 }
