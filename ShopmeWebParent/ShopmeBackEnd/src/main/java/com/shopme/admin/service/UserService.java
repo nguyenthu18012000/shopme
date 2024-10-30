@@ -3,6 +3,7 @@ package com.shopme.admin.service;
 import com.shopme.admin.exception.UserNotFoundException;
 import com.shopme.admin.pojo.request.UserLoginRequest;
 import com.shopme.admin.pojo.response.ListUserResponse;
+import com.shopme.admin.pojo.response.UserLoginResponse;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +31,7 @@ public interface UserService {
 
     public void deleteUserById(Integer id) throws UserNotFoundException;
 
-    public ResponseEntity<Object> login(UserLoginRequest request);
+    public UserLoginResponse login(UserLoginRequest request);
 
     public void exportUserCSV(HttpServletResponse response);
 }

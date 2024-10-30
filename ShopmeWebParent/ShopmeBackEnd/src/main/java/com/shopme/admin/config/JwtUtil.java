@@ -1,4 +1,4 @@
-package com.shopme.admin.security;
+package com.shopme.admin.config;
 
 import com.shopme.admin.exception.BizException;
 import com.shopme.admin.pojo.response.BaseResponseEnum;
@@ -8,7 +8,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     @Value("yz2VmR8YtcbJRQ4PXqhREC6BpK4tE3aPobasTiLoP")
@@ -26,8 +27,7 @@ public class JwtUtil {
     @Value("7d")
     private Duration expiration;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public String generateLoginJwtToken(User userLogin) {
         try {

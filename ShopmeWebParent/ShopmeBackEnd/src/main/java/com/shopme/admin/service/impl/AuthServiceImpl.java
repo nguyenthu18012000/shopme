@@ -1,19 +1,20 @@
 package com.shopme.admin.service.impl;
 
 import com.shopme.admin.pojo.request.UserLoginRequest;
+import com.shopme.admin.pojo.response.UserLoginResponse;
 import com.shopme.admin.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
     @Override
-    public ResponseEntity<Object> login(UserLoginRequest request) {
-        return userService.login(request);
+    public UserLoginResponse login(UserLoginRequest request) {
+        return this.userService.login(request);
     }
 }

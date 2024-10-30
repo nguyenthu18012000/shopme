@@ -1,4 +1,4 @@
-package com.shopme.admin.security;
+package com.shopme.admin.config;
 
 import com.shopme.admin.repository.UserRepository;
 import com.shopme.common.entity.User;
@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class ShopmeUserDetailsService  implements UserDetailsService {
+public class ShopmeUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepo;
