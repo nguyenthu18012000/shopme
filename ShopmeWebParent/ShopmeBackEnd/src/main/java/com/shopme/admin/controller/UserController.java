@@ -20,15 +20,13 @@ public class UserController {
 
 	@Autowired
 	private UserServiceImpl service;
-	
-	@CrossOrigin(origins = "http://localhost:4200")
+
 	@GetMapping("/users/all")
 	public ResponseEntity<Object> getListUser() {
 		List<User> listUsers = service.getListUser();
 		return ResponseEntity.ok(listUsers);
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/user")
 	public ResponseEntity<Object> getListUserByPage(
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -39,15 +37,13 @@ public class UserController {
 		ListUserResponse listUsers = service.getListUserByPage(page, sortField, sortDir, keyword);
 		return ResponseEntity.ok(listUsers);
 	}
-	
-	@CrossOrigin(origins = "http://localhost:4200")
+
 	@GetMapping("/users/roles")
 	public ResponseEntity<Object> getListRole() {
 		List<Role> listRoles = service.getListRole();
 		return ResponseEntity.ok(listRoles);
 	}
-	
-	@CrossOrigin(origins = "http://localhost:4200")
+
 	@PostMapping("/users/new")
 	public String createUser(@ModelAttribute User user, @RequestPart(name = "image", required = false) MultipartFile multipartFile) throws IOException {
 		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail(), null);
@@ -57,8 +53,7 @@ public class UserController {
 		User savedUser = this.service.createUser(user, multipartFile);
 		return "create user successfully";
 	}
-	
-	@CrossOrigin(origins = "http://localhost:4200")
+
 	@GetMapping("/users/{id}")
 	public User getUserById(@PathVariable(name = "id") Integer id) throws UserNotFoundException {
 		try {
@@ -68,8 +63,7 @@ public class UserController {
 			throw new UserNotFoundException("Could not found any user with ID " + id);
 		}
 	}
-	
-	@CrossOrigin(origins = "http://localhost:4200")
+
 	@PutMapping("/users/edit")
 	public String updateUser(@ModelAttribute User user, @RequestPart(name = "image", required = false) MultipartFile multipartFile) throws IOException {
 		boolean isEmailUnique =  this.service.isEmailUnique(user.getEmail(), user.getId());
@@ -79,8 +73,7 @@ public class UserController {
 		this.service.updateUser(user, multipartFile);
 		return "update user successfully";
 	}
-	
-	@CrossOrigin(origins = "http://localhost:4200")
+
 	@DeleteMapping("/users/delete/{id}")
 	public String deleteUser(@PathVariable(name = "id") Integer id) {
 		try {
@@ -91,7 +84,6 @@ public class UserController {
 		}
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("user/export/csv")
 	public void exportToCSV(HttpServletResponse response) throws IOException {
 		this.service.exportUserCSV(response);
