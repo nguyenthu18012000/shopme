@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequiredArgsConstructor
@@ -88,5 +89,13 @@ public class UserController {
     @GetMapping("user/export/csv")
     public void exportToCSV(HttpServletResponse response) throws IOException {
         this.service.exportUserCSV(response);
+    }
+
+    @GetMapping("/users/current-user")
+    public void getCurrentUser() {
+        System.out.println("aklsjdfhalksdjfhalskdjfalksdjhf");
+        User user = (User) SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(user);
+//        return "Current user: " + user.getEmail();
     }
 }
