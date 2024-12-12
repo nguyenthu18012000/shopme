@@ -146,18 +146,26 @@ public class UserServiceImpl implements UserService {
     public UserLoginResponse login(UserLoginRequest request) {
         User userEntity = this.userRepo.getUserByEmail(request.getEmail());
 //				.orElseThrow(() -> new BizException(BaseResponseEnum.BAD_REQUEST, "Invalid credentials"));
-
+            UserLoginResponse response = new UserLoginResponse();
+System.out.println(userEntity + "======" + response);
         if (userEntity == null) {
-            throw new BizException(BaseResponseEnum.BAD_REQUEST, "Invalid credentials");
+//            throw new BizException(BaseResponseEnum.BAD_REQUEST, "Invalid credentials");
+            response.setErrorCode("USER_NOT_FOUND");
+            response.setMessage("Invalid credentials");
+            return response; // Trả về đối tượng lỗi
         }
 
         if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
-            throw new BizException(BaseResponseEnum.UN_AUTHORIZE, "Invalid credentials");
+//            throw new BizException(BaseResponseEnum.UN_AUTHORIZE, "Invalid credentials");
+            response.setErrorCode("USER_NOT_FOUND");
+            response.setMessage("Invalid credentials");
+            return response; // Trả về đối tượng lỗi
         }
 
-        UserLoginResponse response = new UserLoginResponse();
+//        UserLoginResponse response = new UserLoginResponse();
         response.setAccessToken(jwtUtil.generateLoginJwtToken(userEntity));
         response.setUserId(userEntity.getId());
+        System.out.println(response);
         return response;
     }
 

@@ -43,6 +43,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             }
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(userLogin.getId(), null, null);
+            System.out.println("authentication ====> " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception ex) {
             log.error("Authentication failed: {} - {}", ex.getMessage(), request.getRequestURI());

@@ -19,6 +19,7 @@ public class AuthController {
 
     @PostMapping("login")
     public UserLoginResponse login(@RequestBody @Valid UserLoginRequest request) {
+        System.out.println(request);
         return this.authService.login(request);
     }
 }
